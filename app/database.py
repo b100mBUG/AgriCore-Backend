@@ -4,6 +4,7 @@ database.py — Async SQLAlchemy engine, session factory, and init helper.
 
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
+import asyncio
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -16,7 +17,7 @@ from app.models.base import Base
 
 engine = create_async_engine(
     settings.database_url,
-    connect_args={"check_same_thread": False},
+    connect_args={"ssl": True},  # 👈 Swap check_same_thread for this!
     echo=False,
     future=True,
 )
@@ -43,11 +44,4 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
-async def init_db() -> None:
-    # Import all models so Base.metadata picks them up
-    import app.models.farmer  # noqa: F401
-    import app.models.officer  # noqa: F401
-    import app.models.chat    # noqa: F401
 
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)

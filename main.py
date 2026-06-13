@@ -9,7 +9,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.database import init_db
 from app.routes.farmers import router as farmers_router
 from app.routes.chat import router as chat_router
 from app.routes.weather import router as weather_router
@@ -26,7 +25,6 @@ log = logging.getLogger("agribot")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     log.info("AgriBot starting — initialising database...")
-    #await init_db()
     log.info("Database ready.")
     yield
     log.info("AgriBot shutting down.")
