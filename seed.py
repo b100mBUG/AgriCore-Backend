@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, ".")
 
-from app.database import init_db, get_db
+from app.database import get_db
 from app.models.officer import ExtensionOfficer, OfficerSpecialization
 
 OFFICERS = [
@@ -71,7 +71,6 @@ OFFICERS = [
 
 
 async def seed():
-    await init_db()
     async with get_db() as db:
         for data in OFFICERS:
             db.add(ExtensionOfficer(**data))
